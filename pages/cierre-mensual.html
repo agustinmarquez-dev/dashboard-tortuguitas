@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · Cierre Capacitaciones</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --agustina-fill:  #FFADAD;
+    --agustina-border:#D94040;
+    --agustin-fill:   #D4BAFF;
+    --agustin-border: #7040C0;
+    --facundo-fill:   #A8C8FF;
+    --facundo-border: #2A5FCC;
+    --emiliano-fill:  #FFCB94;
+    --emiliano-border:#D46A10;
+    --todos-fill:     #B5EAD7;
+    --todos-border:   #2E8B5A;
+    --ger-fill:       #D0EAD0;
+    --ger-border:     #3A7A3A;
+    --bg:      #FBF7F4;
+    --card:    #FFFFFF;
+    --text:    #3A2E2E;
+    --muted:   #9B8B8B;
+    --border:  #EDE6E0;
+    --shadow:  rgba(80,60,120,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 28px 48px;
+  }
+
+  /* HEADER */
+  header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 28px; padding-bottom: 20px;
+    border-bottom: 1.5px solid var(--border);
+  }
+  header .title-block h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem; font-weight: 600;
+    line-height: 1.1; letter-spacing: -0.5px;
+  }
+  header .title-block span {
+    font-family: 'Fraunces', serif;
+    font-style: italic; font-size: 1rem;
+    color: var(--muted); font-weight: 300;
+    display: block; margin-top: 4px;
+  }
+  .tag {
+    background: var(--todos-fill); color: var(--todos-border);
+    font-size: 0.75rem; padding: 5px 12px;
+    border-radius: 20px; font-weight: 500; letter-spacing: 0.5px;
+  }
+
+  /* FILTRO */
+  .filter-bar {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 26px; align-items: center;
+  }
+  .filter-label {
+    font-size: 0.72rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin-right: 2px;
+  }
+  .cap-btn {
+    display: flex; align-items: center; gap: 7px;
+    border: 1.5px solid var(--border);
+    background: var(--card); color: var(--muted);
+    padding: 7px 16px; border-radius: 24px;
+    font-size: 0.78rem; cursor: pointer;
+    transition: all .22s; font-family: 'DM Sans', sans-serif;
+    line-height: 1;
+  }
+  .cap-btn .dot { 
+    width:9px; height:9px; border-radius:50%; flex-shrink:0; 
+    display:inline-block; vertical-align:middle; 
+    position:relative; top:0;
+  }
+  .cap-btn:hover { transform:translateY(-1px); box-shadow:0 3px 10px var(--shadow); }
+  .cap-btn.active { font-weight:500; box-shadow:0 3px 12px var(--shadow); transform:translateY(-1px); }
+  .cap-btn[data-cap="todos"].active    { background:#E8F8F0; border-color:var(--todos-fill);     color:var(--todos-border); }
+  .cap-btn[data-cap="Agustín"].active  { background:#F0E8FF; border-color:var(--agustin-fill);   color:var(--agustin-border); }
+  .cap-btn[data-cap="Agustina"].active { background:#FFF0F0; border-color:var(--agustina-fill);  color:var(--agustina-border); }
+  .cap-btn[data-cap="Emiliano"].active { background:#FFF4E8; border-color:var(--emiliano-fill);  color:var(--emiliano-border); }
+  .cap-btn[data-cap="Facundo"].active  { background:#E8F0FF; border-color:var(--facundo-fill);   color:var(--facundo-border); }
+
+  /* KPI ROW */
+  .kpi-row {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 14px; margin-bottom: 24px;
+  }
+  .kpi {
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 20px 22px;
+    box-shadow: 0 2px 12px var(--shadow);
+    position: relative; overflow: hidden; transition: transform .2s;
+  }
+  .kpi:hover { transform: translateY(-2px); }
+  .kpi::before {
+    content:''; position:absolute; top:0; left:0; width:100%; height:4px;
+  }
+  .kpi:nth-child(1)::before { background:var(--agustina-fill); }
+  .kpi:nth-child(2)::before { background:var(--facundo-fill); }
+  .kpi:nth-child(3)::before { background:var(--emiliano-fill); }
+  .kpi .label { font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px; }
+  .kpi .kpi-title-big { font-family:'Fraunces',serif; font-size:1.05rem; font-weight:600; margin-bottom:6px; }
+  .kpi .value { font-family:'Fraunces',serif; font-size:2.1rem; font-weight:600; line-height:1; }
+  .kpi .sub { font-size:.75rem; color:var(--muted); margin-top:5px; }
+
+  /* GRID */
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+  .grid-full { margin-bottom:20px; }
+
+  /* CARD */
+  .card {
+    background:var(--card); border:1.5px solid var(--border);
+    border-radius:18px; padding:24px;
+    box-shadow:0 2px 14px var(--shadow);
+    transition: opacity .3s, transform .3s;
+  }
+  .card-title { font-family:'Fraunces',serif; font-size:.95rem; font-weight:600; margin-bottom:6px; }
+  .card-sub { font-size:.71rem; color:var(--muted); text-transform:uppercase; letter-spacing:.7px; margin-bottom:20px; }
+  canvas { max-width:100%; }
+
+  /* RADAR */
+  .radar-wrap { display:flex; flex-direction:column; gap:16px; }
+  .radar-wrap canvas { max-height:260px; }
+  .radar-legend { display:flex; flex-wrap:wrap; gap:6px 18px; }
+  #cardRadar { overflow:hidden; }
+  .radar-legend .legend-item { display:flex; align-items:center; gap:6px; font-size:.76rem; white-space:nowrap; }
+  .legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; display:inline-block; }
+  .legend-pct { font-family:'Fraunces',serif; font-weight:600; font-size:.85rem; margin-left:3px; }
+
+  /* WEEK TABS */
+  .week-tabs { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+  .week-btn {
+    border:1.5px solid var(--border); background:var(--bg); color:var(--muted);
+    padding:5px 14px; border-radius:20px; font-size:.75rem;
+    cursor:pointer; transition:all .2s; font-family:'DM Sans',sans-serif;
+  }
+  .week-btn.active { background:var(--todos-fill); border-color:var(--todos-border); color:var(--todos-border); font-weight:500; }
+
+  /* TABLA */
+  .brand-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .brand-table th { text-align:left; padding:6px 10px; font-size:.68rem; text-transform:uppercase; letter-spacing:.7px; color:var(--muted); font-weight:500; border-bottom:1.5px solid var(--border); }
+  .brand-table td { padding:8px 10px; border-bottom:1px solid #f5efeb; }
+  .brand-table tr:last-child td { border:none; }
+  .brand-badge { display:inline-block; padding:2px 9px; border-radius:10px; font-size:.68rem; font-weight:500; }
+  .b-ext { background:var(--peach); color:#7a4e1a; }
+  .b-sab { background:var(--mint); color:#1a5c35; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+  .kpi,.card { animation:fadeUp .45s ease both; }
+  .kpi:nth-child(1){animation-delay:.04s} .kpi:nth-child(2){animation-delay:.08s} .kpi:nth-child(3){animation-delay:.12s}
+
+  footer { text-align:center; margin-top:40px; font-size:.7rem; color:var(--muted); }
+
+  @media(max-width:860px){
+    .kpi-row{grid-template-columns:1fr 1fr;}
+    .grid-2{grid-template-columns:1fr;}
+    .radar-wrap{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-block">
+    <h1>Cierre de Capacitaciones</h1>
+    <span>Panel de resultados · Cierre mensual</span>
+  </div>
+  <span class="tag">📋 Resumen mensual</span>
+</header>
+
+<!-- FILTRO -->
+<div class="filter-bar">
+  <span class="filter-label">Ver por:</span>
+  <button class="cap-btn active" data-cap="todos">
+    <span class="dot" style="background:#B5EAD7"></span> Todos
+  </button>
+  <button class="cap-btn" data-cap="Agustín">
+    <span class="dot" style="background:#D4BAFF"></span> Agustín
+  </button>
+  <button class="cap-btn" data-cap="Agustina">
+    <span class="dot" style="background:#FFADAD"></span> Agustina
+  </button>
+  <button class="cap-btn" data-cap="Emiliano">
+    <span class="dot" style="background:#FFCB94"></span> Emiliano
+  </button>
+  <button class="cap-btn" data-cap="Facundo">
+    <span class="dot" style="background:#A8C8FF"></span> Facundo
+  </button>
+</div>
+
+<!-- KPIs -->
+<div class="kpi-row">
+  <div class="kpi">
+    <div class="kpi-title-big">Altas registradas</div>
+    <div class="value" id="kpiAltas">645</div>
+    <div class="sub" id="kpiAltasSub">total del equipo</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Cumplimiento general</div>
+    <div class="value" id="kpiCumpl">71,7%</div>
+    <div class="sub" id="kpiCumplSub">sobre total del mes</div>
+  </div>
+  <div class="kpi">
+    <div class="label">No se presentaron</div>
+    <div class="value" id="kpiAus">48</div>
+    <div class="sub" id="kpiAusSub">ausentes primer día</div>
+  </div>
+</div>
+
+<!-- ROW 1: Radar + Doughnut -->
+<div class="grid-2">
+  <div class="card" id="cardRadar">
+    <div class="card-title">Cumplimiento general</div>
+    <div class="card-sub" id="radarSub">% alcanzado por capacitador</div>
+    <div class="radar-wrap">
+      <canvas id="radarChart"></canvas>
+      <div class="radar-legend" id="radarLegend"></div>
+    </div>
+    <!-- Panel de detalle semanal (visible solo al seleccionar un capacitador) -->
+    <div id="radarDetailPanel" style="display:none;margin-top:18px;padding-top:16px;border-top:1.5px solid var(--border);">
+      <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;" id="radarDetailTitle"></div>
+      <div id="radarDetailRows"></div>
+    </div>
+  </div>
+  <div class="card" id="cardDoughnut">
+    <div class="card-title">Participación en envíos</div>
+    <div class="card-sub" id="doughnutSub">distribución % por capacitador</div>
+    <canvas id="doughnutPart" height="250"></canvas>
+  </div>
+</div>
+
+<!-- ROW 2: Línea semanal full width -->
+<div class="grid-full">
+  <div class="card">
+    <div class="card-title">Evolución semanal</div>
+    <div class="card-sub" id="lineSub">enviados · vacantes · faltantes por semana</div>
+    <canvas id="lineWeek" height="110"></canvas>
+  </div>
+</div>
+
+<!-- RANKING POR CUMPLIMIENTO -->
+<div class="grid-full">
+  <div class="card" id="cardRanking">
+    <div class="card-title">Ranking por Cumplimiento General</div>
+    <div class="card-sub">por capacitador · sin gerenciales</div>
+    <div id="rankingList" style="margin-top:8px;"></div>
+  </div>
+</div>
+
+<footer>Sabores Express · Capacitaciones · Dashboard generado desde CIERRE_CAP.xlsx</footer>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const CAPS     = ['Agustín','Agustina','Emiliano','Facundo'];
+const CAPS_ALL = ['Agustín','Agustina','Emiliano','Facundo','Gerenciales'];
+// Paleta: Agustín=Violeta, Agustina=Rojo, Emiliano=Naranja, Facundo=Azul, Gerenciales/Todos=Verde
+const SOLID        = ['#D4BAFF','#FFADAD','#FFCB94','#A8C8FF','#B5EAD7'];
+const SOLID_BORDER = ['#7040C0','#D94040','#D46A10','#2A5FCC','#2E8B5A'];
+const CAP_COLOR  = {'Agustín':'#D4BAFF','Agustina':'#FFADAD','Emiliano':'#FFCB94','Facundo':'#A8C8FF','Gerenciales':'#B5EAD7'};
+const CAP_BORDER = {'Agustín':'#7040C0','Agustina':'#D94040','Emiliano':'#D46A10','Facundo':'#2A5FCC','Gerenciales':'#2E8B5A'};
+
+const cumplGeneral = {'Agustín':0.636,'Agustina':0.936,'Emiliano':0.596,'Facundo':0.846,'Gerenciales':0.870};
+const cumplSemanas = [
+  {label:'1ª Semana','Agustín':0.382,'Agustina':1.00,'Emiliano':0.348,'Facundo':0.800,'Gerenciales':0.818},
+  {label:'2ª Semana','Agustín':0.818,'Agustina':0.933,'Emiliano':0.831,'Facundo':0.895,'Gerenciales':0.800},
+  {label:'3ª Semana','Agustín':0.900,'Agustina':0.924,'Emiliano':null,'Facundo':0.830,'Gerenciales':0.950},
+];
+
+const semanasGlobal = [
+  {label:'1ª Sem', enviados:144, vacantes:304, faltantes:160},
+  {label:'2ª Sem', enviados:270, vacantes:319, faltantes:49},
+  {label:'3ª Sem', enviados:164, vacantes:183, faltantes:19},
+];
+const enviadosCap   = {'Agustín':[47,81,45],'Agustina':[13,28,61],'Emiliano':[39,98,0],'Facundo':[36,51,39]};
+const vacantesCap   = {'Agustín':[123,99,50],'Agustina':[13,30,66],'Emiliano':[112,118,0],'Facundo':[45,57,47]};
+const faltantesCap  = {'Agustín':[76,18,5],'Agustina':[0,2,5],'Emiliano':[73,20,0],'Facundo':[9,6,8]};
+
+const participacion = {'Agustín':346,'Agustina':204,'Emiliano':274,'Facundo':252,'Gerenciales':80};
+const altas    = {'Agustín':215,'Agustina':152,'Emiliano':134,'Facundo':144};
+const ausencias= {'Agustín':15,'Agustina':10,'Emiliano':12,'Facundo':11};
+const gerenciales = {'Agustín':6,'Agustina':11,'Emiliano':4,'Facundo':2};
+const marcas = [
+  {cap:'Agustín',  marca:'Extremas',qty:146},{cap:'Agustín',  marca:'Sabores',qty:69},
+  {cap:'Agustina', marca:'Extremas',qty:55}, {cap:'Agustina', marca:'Sabores',qty:97},
+  {cap:'Emiliano', marca:'Extremas',qty:58}, {cap:'Emiliano', marca:'Sabores',qty:76},
+  {cap:'Facundo',  marca:'Extremas',qty:35}, {cap:'Facundo',  marca:'Sabores',qty:109},
+];
+
+const kpiData = {
+  todos:     {altas:645,cumpl:'71,7%',aus:48,altasSub:'total del equipo',cumplSub:'sobre total del mes',ausSub:'ausentes primer día'},
+  'Agustín': {altas:215,cumpl:'63,6%',aus:15,altasSub:'altas de Agustín',cumplSub:'cumplimiento Agustín',ausSub:'ausentes de Agustín'},
+  'Agustina':{altas:152,cumpl:'93,6%',aus:10,altasSub:'altas de Agustina',cumplSub:'cumplimiento Agustina',ausSub:'ausentes de Agustina'},
+  'Emiliano':{altas:134,cumpl:'59,6%',aus:12,altasSub:'altas de Emiliano',cumplSub:'cumplimiento Emiliano',ausSub:'ausentes de Emiliano'},
+  'Facundo': {altas:144,cumpl:'84,6%',aus:11,altasSub:'altas de Facundo',cumplSub:'cumplimiento Facundo',ausSub:'ausentes de Facundo'},
+};
+
+let currentCap  = 'todos';
+let currentWeek = 'all';
+
+// ─── KPIs ─────────────────────────────────────────────────────────────────────
+function updateKPIs(cap) {
+  const d = kpiData[cap] || kpiData.todos;
+  document.getElementById('kpiAltas').textContent    = d.altas;
+  document.getElementById('kpiAltasSub').textContent = d.altasSub;
+  document.getElementById('kpiCumpl').textContent    = d.cumpl;
+  document.getElementById('kpiCumplSub').textContent = d.cumplSub;
+  document.getElementById('kpiAus').textContent      = d.aus;
+  document.getElementById('kpiAusSub').textContent   = d.ausSub;
+}
+
+// ─── RADAR ────────────────────────────────────────────────────────────────────
+const radarCtx = document.getElementById('radarChart').getContext('2d');
+const radarColors = CAPS_ALL.map(c=>CAP_COLOR[c]);
+
+const radarChart = new Chart(radarCtx, {
+  type:'radar',
+  data:{
+    labels:CAPS_ALL,
+    datasets:[{
+      label:'Cumplimiento %',
+      data:CAPS_ALL.map(c=>+(cumplGeneral[c]*100).toFixed(1)),
+      backgroundColor:'rgba(181,234,215,0.28)',
+      borderColor:'#2E8B5A', borderWidth:2.5,
+      pointBackgroundColor:radarColors,
+      pointBorderColor:'#fff', pointRadius:7,
+      pointHoverRadius:9, pointBorderWidth:2,
+    }]
+  },
+  options:{
+    responsive:true,
+    scales:{r:{
+      beginAtZero:true,min:0,max:100,
+      ticks:{stepSize:25,font:{size:10},color:'#7a6a6a',backdropColor:'transparent',callback:v=>v+'%'},
+      grid:{color:'#B0A090', lineWidth:1.2},
+      pointLabels:{font:{size:12,family:'DM Sans'},color:'#3A2E2E'},
+      angleLines:{color:'#B0A090', lineWidth:1.2}
+    }},
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        callbacks:{
+          label:ctx=>` ${ctx.label}: ${ctx.raw}%`,
+          title:()=>''
+        },
+        displayColors:false
+      }
+    }
+  }
+});
+
+const legendEl = document.getElementById('radarLegend');
+CAPS_ALL.forEach((cap,i)=>{
+  legendEl.innerHTML+=`<div class="legend-item" data-name="${cap}" style="transition:opacity .25s,font-weight .25s;">
+    <span class="legend-dot" style="background:${radarColors[i]}"></span>
+    <span>${cap}</span>
+    <span class="legend-pct" style="color:${radarColors[i]}">${+(cumplGeneral[cap]*100).toFixed(1)}%</span>
+  </div>`;
+});
+
+function updateRadar(cap) {
+  if(cap==='todos'){
+    radarChart.data.datasets[0].pointBackgroundColor = radarColors;
+    radarChart.data.datasets[0].backgroundColor = 'rgba(216,201,242,0.28)';
+    radarChart.data.datasets[0].borderColor = '#B89FD8';
+    radarChart.data.datasets[0].pointRadius = CAPS_ALL.map(()=>7);
+    document.getElementById('radarDetailPanel').style.display='none';
+    document.getElementById('radarSub').textContent='% alcanzado por capacitador';
+  } else {
+    radarChart.data.datasets[0].pointBackgroundColor = CAPS_ALL.map(c=>c===cap?CAP_COLOR[cap]:'rgba(200,190,190,0.3)');
+    radarChart.data.datasets[0].backgroundColor = CAP_COLOR[cap]+'28';
+    radarChart.data.datasets[0].borderColor = CAP_BORDER[cap];
+    radarChart.data.datasets[0].pointRadius = CAPS_ALL.map(c=>c===cap?10:4);
+
+    // Build weekly detail panel
+    const panel = document.getElementById('radarDetailPanel');
+    const title = document.getElementById('radarDetailTitle');
+    const rows  = document.getElementById('radarDetailRows');
+    title.textContent = `Desglose de cumplimiento · ${cap}`;
+    title.style.color = CAP_BORDER[cap];
+
+    const semLabels = ['1ª Semana','2ª Semana','3ª Semana'];
+    let html = '';
+    cumplSemanas.forEach((sem,i)=>{
+      const val = sem[cap];
+      const pct = val!=null ? (val*100).toFixed(1)+'%' : 'Sin datos';
+      const w   = val!=null ? (val*100).toFixed(1) : 0;
+      html += `<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <span style="font-size:.75rem;color:var(--muted);min-width:80px;">${semLabels[i]}</span>
+        <div style="flex:1;height:7px;border-radius:20px;background:#f0ebe5;overflow:hidden;">
+          <div style="width:${w}%;height:100%;border-radius:20px;background:${CAP_COLOR[cap]};border:1px solid ${CAP_BORDER[cap]};transition:width .5s ease;"></div>
+        </div>
+        <span style="font-family:'Fraunces',serif;font-weight:600;font-size:.85rem;color:${CAP_BORDER[cap]};min-width:55px;text-align:right;">${pct}</span>
+      </div>`;
+    });
+    // Total row
+    const total = (cumplGeneral[cap]*100).toFixed(1);
+    html += `<div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:10px;border-top:1px dashed ${CAP_BORDER[cap]}40;">
+      <span style="font-size:.75rem;font-weight:600;color:var(--text);min-width:80px;">Total mes</span>
+      <div style="flex:1;height:9px;border-radius:20px;background:#f0ebe5;overflow:hidden;">
+        <div style="width:${total}%;height:100%;border-radius:20px;background:${CAP_BORDER[cap]};transition:width .5s ease;"></div>
+      </div>
+      <span style="font-family:'Fraunces',serif;font-weight:600;font-size:1rem;color:${CAP_BORDER[cap]};min-width:55px;text-align:right;">${total}%</span>
+    </div>`;
+
+    rows.innerHTML = html;
+    panel.style.display = 'block';
+    document.getElementById('radarSub').textContent=`detalle · ${cap}`;
+  }
+  // Update legend highlight
+  document.querySelectorAll('.legend-item').forEach(item=>{
+    const name=item.dataset.name;
+    if(cap==='todos'){
+      item.style.opacity='1';
+      item.style.fontWeight='400';
+    } else {
+      item.style.opacity= name===cap?'1':'0.35';
+      item.style.fontWeight= name===cap?'600':'400';
+    }
+  });
+  radarChart.update();
+}
+
+// ─── NINJA TURTLE SVGs ────────────────────────────────────────────────────────
+function makeTurtle(shellColor, shellBorder, maskColor) {
+  return `<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="5" cy="22" rx="3" ry="4" fill="#6abf6a" stroke="#2e6e2e" stroke-width="1.2"/>
+    <ellipse cx="35" cy="22" rx="3" ry="4" fill="#6abf6a" stroke="#2e6e2e" stroke-width="1.2"/>
+    <ellipse cx="20" cy="23" rx="14" ry="11" fill="${shellColor}" stroke="${shellBorder}" stroke-width="1.8"/>
+    <ellipse cx="20" cy="23" rx="8" ry="6.5" fill="${shellColor}" stroke="${shellBorder}" stroke-width="1" opacity=".6"/>
+    <line x1="20" y1="12" x2="20" y2="34" stroke="${shellBorder}" stroke-width="1" opacity=".4"/>
+    <line x1="6"  y1="23" x2="34" y2="23" stroke="${shellBorder}" stroke-width="1" opacity=".4"/>
+    <line x1="9"  y1="15" x2="31" y2="31" stroke="${shellBorder}" stroke-width=".8" opacity=".3"/>
+    <line x1="31" y1="15" x2="9"  y2="31" stroke="${shellBorder}" stroke-width=".8" opacity=".3"/>
+    <ellipse cx="9"  cy="31" rx="3.5" ry="2.5" fill="#6abf6a" stroke="#2e6e2e" stroke-width="1.2"/>
+    <ellipse cx="31" cy="31" rx="3.5" ry="2.5" fill="#6abf6a" stroke="#2e6e2e" stroke-width="1.2"/>
+    <ellipse cx="20" cy="11" rx="7.5" ry="6.5" fill="#6abf6a" stroke="#2e6e2e" stroke-width="1.5"/>
+    <rect x="12.5" y="9" width="15" height="4.5" rx="2.2" fill="${maskColor}"/>
+    <path d="M27.5 9.5 L33 6.5 M27.5 13 L33 16" stroke="${maskColor}" stroke-width="1.8" stroke-linecap="round"/>
+    <ellipse cx="16.5" cy="9.5" rx="2" ry="2" fill="white" stroke="${maskColor}" stroke-width=".5"/>
+    <ellipse cx="23.5" cy="9.5" rx="2" ry="2" fill="white" stroke="${maskColor}" stroke-width=".5"/>
+    <circle cx="17" cy="9.8" r="1" fill="#1a1a1a"/>
+    <circle cx="24" cy="9.8" r="1" fill="#1a1a1a"/>
+    <circle cx="17.3" cy="9.4" r=".35" fill="white"/>
+    <circle cx="24.3" cy="9.4" r=".35" fill="white"/>
+    <path d="M17 13 Q20 15.5 23 13" stroke="#2e6e2e" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+    <circle cx="19" cy="12" r=".5" fill="#2e6e2e" opacity=".6"/>
+    <circle cx="21" cy="12" r=".5" fill="#2e6e2e" opacity=".6"/>
+  </svg>`;
+}
+
+const NINJA_SVG = {
+  // caparazón violeta pastel, máscara violeta oscuro
+  'Agustín':  () => makeTurtle('#D4BAFF','#7040C0','#7040C0'),
+  // caparazón rojo pastel, máscara rojo oscuro
+  'Agustina': () => makeTurtle('#FFADAD','#D94040','#D94040'),
+  // caparazón naranja pastel, máscara naranja oscuro
+  'Emiliano': () => makeTurtle('#FFCB94','#D46A10','#D46A10'),
+  // caparazón azul pastel, máscara azul oscuro
+  'Facundo':  () => makeTurtle('#A8C8FF','#2A5FCC','#2A5FCC'),
+  // caparazón verde pastel, máscara verde oscuro
+  'todos':    () => makeTurtle('#B5EAD7','#2E8B5A','#2E8B5A'),
+};
+
+// ─── DOUGHNUT con % dentro ───────────────────────────────────────────────────
+const doughnutLabelPlugin = {
+  id:'doughnutLabels',
+  afterDatasetsDraw(chart){
+    const{ctx,data}=chart;
+    const total=data.datasets[0].data.reduce((a,b)=>a+(b||0),0);
+    ctx.save();
+    chart.getDatasetMeta(0).data.forEach((arc,i)=>{
+      const val=data.datasets[0].data[i];
+      if(!val||val===0) return;
+      const pct=((val/total)*100).toFixed(1)+'%';
+      const mid=arc.startAngle+(arc.endAngle-arc.startAngle)/2;
+      const r=(arc.innerRadius+arc.outerRadius)/2;
+      const x=arc.x+Math.cos(mid)*r;
+      const y=arc.y+Math.sin(mid)*r;
+      ctx.fillStyle='#3A2E2E';
+      ctx.font='600 11px DM Sans';
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(pct,x,y);
+    });
+    ctx.restore();
+  }
+};
+Chart.register(doughnutLabelPlugin);
+
+let doughnutChart=null;
+function buildDoughnut(cap){
+  const ctx=document.getElementById('doughnutPart').getContext('2d');
+  if(doughnutChart){doughnutChart.destroy();}
+
+  let labels,dataVals,colors;
+  if(cap==='todos'){
+    labels   = Object.keys(participacion);
+    dataVals = Object.values(participacion);
+    colors   = SOLID;
+    document.getElementById('doughnutSub').textContent='distribución % por capacitador';
+  } else {
+    const cm=marcas.filter(m=>m.cap===cap);
+    labels   = cm.map(m=>m.marca);
+    dataVals = cm.map(m=>m.qty);
+    colors   = ['#FFCB94','#B5EAD7'];  /* naranja pastel / verde pastel para marcas */
+    document.getElementById('doughnutSub').textContent=`distribución por marca · ${cap}`;
+  }
+
+  doughnutChart=new Chart(ctx,{
+    type:'doughnut',
+    data:{labels,datasets:[{data:dataVals,backgroundColor:colors,borderColor:'#fff',borderWidth:3,hoverOffset:8}]},
+    options:{
+      cutout:'58%',
+      plugins:{
+        legend:{position:'bottom',labels:{color:'#3A2E2E',font:{size:11},boxWidth:12,padding:10}},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw}`}},
+        doughnutLabels:{}
+      }
+    }
+  });
+}
+buildDoughnut('todos');
+
+// ─── LÍNEA con faltantes ──────────────────────────────────────────────────────
+let lineChart=null;
+function buildLine(cap){
+  const ctx=document.getElementById('lineWeek').getContext('2d');
+  if(lineChart){lineChart.destroy();}
+
+  let ds;
+  if(cap==='todos'){
+    ds=[
+      {label:'Enviados',    data:semanasGlobal.map(s=>s.enviados),  borderColor:'#2E8B5A',backgroundColor:'rgba(181,234,215,0.2)',borderWidth:3,pointRadius:6,pointBackgroundColor:'#B5EAD7',tension:0.4,fill:true},
+      {label:'Vacantes',    data:semanasGlobal.map(s=>s.vacantes),  borderColor:'#2A5FCC',backgroundColor:'rgba(168,200,255,0.10)',borderWidth:2.5,pointRadius:6,pointBackgroundColor:'#A8C8FF',tension:0.4,fill:false,borderDash:[6,4]},
+      {label:'Faltantes',   data:semanasGlobal.map(s=>s.faltantes), borderColor:'#D94040',backgroundColor:'rgba(255,173,173,0.15)',borderWidth:2.5,pointRadius:6,pointBackgroundColor:'#FFADAD',tension:0.4,fill:true,borderDash:[3,3]},
+    ];
+    document.getElementById('lineSub').textContent='enviados · vacantes · faltantes por semana';
+  } else {
+    const col=CAP_COLOR[cap];
+    ds=[
+      {label:'Enviados',  data:enviadosCap[cap],  borderColor:col,        backgroundColor:col+'25',              borderWidth:3,  pointRadius:6,pointBackgroundColor:col,        tension:0.4,fill:true},
+      {label:'Vacantes',  data:vacantesCap[cap],  borderColor:'#2A5FCC',  backgroundColor:'rgba(168,200,255,0.10)',borderWidth:2.5,pointRadius:6,pointBackgroundColor:'#A8C8FF',  tension:0.4,fill:false,borderDash:[6,4]},
+      {label:'Faltantes', data:faltantesCap[cap], borderColor:'#D94040',  backgroundColor:'rgba(255,173,173,0.15)',borderWidth:2.5,pointRadius:6,pointBackgroundColor:'#FFADAD',  tension:0.4,fill:true, borderDash:[3,3]},
+    ];
+    document.getElementById('lineSub').textContent=`enviados · vacantes · faltantes · ${cap}`;
+  }
+
+  lineChart=new Chart(ctx,{
+    type:'line',
+    data:{labels:['1ª Sem','2ª Sem','3ª Sem'],datasets:ds},
+    options:{
+      responsive:true,
+      scales:{
+        y:{beginAtZero:true,grid:{color:'#f0ebe5'},ticks:{color:'#9B8B8B',font:{size:10}}},
+        x:{grid:{display:false},ticks:{color:'#3A2E2E',font:{size:11}}}
+      },
+      plugins:{legend:{position:'bottom',labels:{color:'#3A2E2E',font:{size:11},boxWidth:12,padding:12}}}
+    }
+  });
+}
+buildLine('todos');
+
+// ─── TABLA MARCAS (mantenida para datos internos) ─────────────────────────────
+function buildMarcas(cap){
+  // Datos internos mantenidos para posible uso futuro
+}
+buildMarcas('todos');
+
+// ─── RANKING POR CUMPLIMIENTO GENERAL ────────────────────────────────────────
+function buildRanking(cap) {
+  const rankingEl = document.getElementById('rankingList');
+  const ranked = CAPS.map(c=>({name:c, value:cumplGeneral[c], color:CAP_COLOR[c], border:CAP_BORDER[c]}))
+    .sort((a,b)=>b.value-a.value);
+
+  rankingEl.innerHTML = ranked.map((item,i)=>{
+    const pct = (item.value*100).toFixed(1);
+    const medals = ['🥇','🥈','🥉','4°'];
+    const isHighlighted = cap==='todos' || cap===item.name;
+    const opacity = isHighlighted ? '1' : '0.25';
+    const turtleSvg = NINJA_SVG[item.name] ? NINJA_SVG[item.name]() : '';
+    return `<div style="display:flex;align-items:center;gap:14px;padding:10px 6px;border-bottom:1px solid #f5efeb;opacity:${opacity};transition:opacity .3s;">
+      <span style="font-family:'Fraunces',serif;font-size:1rem;width:26px;text-align:center;">${medals[i]}</span>
+      <div style="flex-shrink:0;width:38px;height:38px;filter:drop-shadow(0 2px 4px ${item.border}44);">${turtleSvg}</div>
+      <span style="font-weight:500;flex:1;font-size:.88rem;">${item.name}</span>
+      <div style="flex:2;margin:0 12px;">
+        <div style="height:8px;border-radius:20px;background:#f0ebe5;overflow:hidden;">
+          <div style="width:${pct}%;height:100%;border-radius:20px;background:${item.color};border:1px solid ${item.border};transition:width .6s ease;"></div>
+        </div>
+      </div>
+      <span style="font-family:'Fraunces',serif;font-size:1.05rem;font-weight:600;color:${item.border};min-width:50px;text-align:right;">${pct}%</span>
+    </div>`;
+  }).join('');
+}
+buildRanking('todos');
+
+// ─── FILTRO PRINCIPAL ─────────────────────────────────────────────────────────
+document.querySelectorAll('.cap-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.cap-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCap=btn.dataset.cap;
+
+    updateKPIs(currentCap);
+    updateRadar(currentCap);
+    buildDoughnut(currentCap);
+    buildLine(currentCap);
+    buildRanking(currentCap);
+  });
+});
+</script>
+</body>
+</html>
