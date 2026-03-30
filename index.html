@@ -456,6 +456,11 @@
     });
   });
 
+  function openImageModal(src) {
+  const modal = document.getElementById('imageModal');
+  document.getElementById('modalImg').src = src;
+  modal.style.display = 'flex';
+  }
   function openModal() { 
     document.getElementById('overlay').classList.add('open'); 
     document.body.style.overflow = 'hidden'; 
