@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Equipo de Selección — Sabores Express & Hamburguesas Extremas</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -30,7 +30,7 @@
   }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -60,12 +60,13 @@
     text-transform: uppercase;
     padding: 5px 10px;
     border-radius: 4px;
+    font-family: 'Inter', sans-serif;
   }
-  .header-eyebrow { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .header-eyebrow { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-family: 'Inter', sans-serif; }
   h1 {
-    font-family: 'DM Serif Display', serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 38px;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 1.1;
     color: var(--text);
     margin-top: 4px;
@@ -79,9 +80,9 @@
     border-radius: 100px;
     white-space: nowrap;
     margin-top: 4px;
+    font-family: 'Inter', sans-serif;
   }
 
-  /* Estilos para la imagen principal corregidos */
   .main-team-image {
     width: 100%;
     height: auto;
@@ -105,8 +106,8 @@
     margin-bottom: 2rem;
     justify-content: space-around;
   }
-  .total-num { font-family: 'DM Serif Display', serif; font-size: 42px; color: var(--text); line-height: 1; }
-  .total-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .total-num { font-family: 'Bricolage Grotesque', sans-serif; font-size: 42px; font-weight: 700; color: var(--text); line-height: 1; }
+  .total-desc { font-size: 12px; color: var(--muted); line-height: 1.4; font-family: 'Inter', sans-serif; }
   .total-desc strong { color: var(--text); font-weight: 500; display: block; font-size: 14px; }
   .strip-divider { width: 0.5px; height: 40px; background: var(--border2); }
 
@@ -141,16 +142,17 @@
   .card.purple::before { background: var(--blue-c); }
   .card.amber::before { background: var(--white-c); }
 
-  .card-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; height: 24px; }
-  .card-name { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 12px; }
+  .card-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; height: 24px; font-family: 'Inter', sans-serif; }
+  .card-name { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 12px; font-family: 'Bricolage Grotesque', sans-serif; }
   .card.amber .card-name { color: var(--white-c); }
   .card.coral .card-name { color: var(--red-c); }
   .card.blue .card-name { color: var(--violet-c); }
   .card.green .card-name { color: var(--orange-c); }
   .card.purple .card-name { color: var(--blue-c); }
   .card-number {
-    font-family: 'DM Serif Display', serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 48px;
+    font-weight: 700;
     line-height: 1;
     margin-bottom: 4px;
   }
@@ -160,7 +162,7 @@
   .card.purple .card-number { color: var(--blue-c); }
   .card.amber .card-number { color: var(--white-c); }
 
-  .card-unit { font-size: 11px; color: var(--muted); }
+  .card-unit { font-size: 11px; color: var(--muted); font-family: 'Inter', sans-serif; }
 
   .card-bar {
     margin-top: 14px;
@@ -193,7 +195,7 @@
     color: var(--text);
     font-size: 10px;
     cursor: pointer;
-    font-family: inherit;
+    font-family: 'Inter', sans-serif;
   }
 
   .section-label {
@@ -205,8 +207,51 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    font-family: 'Inter', sans-serif;
   }
   .section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border2); }
+
+  /* ── Kevin Garcia rediseñado ── */
+  .kevin-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.5rem 0;
+    margin-bottom: 0;
+  }
+
+  .kevin-role {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .kevin-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--brown-c);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .kevin-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+  }
+
+  .kevin-divider {
+    width: 100%;
+    height: 0.5px;
+    background: var(--border2);
+    margin-bottom: 2rem;
+  }
 
   .person-btn {
     display: flex;
@@ -219,7 +264,7 @@
     padding: 1.25rem 1.5rem;
     cursor: pointer;
     color: inherit;
-    font-family: inherit;
+    font-family: 'Inter', sans-serif;
     transition: 0.2s;
   }
   .person-btn:hover { background: var(--surface2); transform: translateY(-2px); }
@@ -234,7 +279,7 @@
   }
   .avatar svg { width: 24px; height: 24px; fill: var(--brown-c); }
 
-  /* Estilos Modal */
+  /* Modal */
   .overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100;
     display: flex; align-items: center; justify-content: center; padding: 1.5rem;
@@ -247,17 +292,17 @@
     padding: 2rem; max-width: 900px; width: 100%; max-height: 85vh; overflow-y: auto;
   }
   .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
-  .modal-title { font-family: 'DM Serif Display', serif; font-size: 26px; }
+  .modal-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 600; }
   .close-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); border: none; color: #fff; cursor: pointer; font-size: 20px; }
 
   .zones-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; }
-  .zone-head { padding: 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
+  .zone-head { padding: 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; text-align: center; font-family: 'Bricolage Grotesque', sans-serif; }
   .zone-head.coral { background: rgba(232,42,42,0.2); color: #ff6b6b; }
   .zone-head.blue { background: rgba(155,89,182,0.2); color: #c39bd3; }
   .zone-head.green { background: rgba(232,130,26,0.2); color: #f0a060; }
   .zone-head.purple { background: rgba(26,127,204,0.2); color: #57b3ff; }
 
-  .zone-person { font-size: 13px; color: var(--muted); padding: 7px 0; border-bottom: 0.5px solid var(--border); }
+  .zone-person { font-size: 13px; color: var(--muted); padding: 7px 0; border-bottom: 0.5px solid var(--border); font-family: 'Inter', sans-serif; }
   
   @media (max-width: 600px) {
     .total-strip { flex-direction: column; align-items: flex-start; }
@@ -284,12 +329,12 @@
 
   <img src="equipo-selec.jpeg" class="main-team-image" alt="Equipo">
 
- <div style="text-align:center; margin: 1.5rem 0 2rem;">
-  <a href="pages/cierre-mensual.html"
-     style="display:inline-block; padding: 12px 28px; background: var(--accent); color: #fff; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; letter-spacing: 0.05em;">
-    Ver Cierre Mes Marzo →
-  </a>
-</div>
+  <div style="text-align:center; margin: 1.5rem 0 2rem;">
+    <a href="pages/cierre-mensual.html"
+       style="display:inline-block; padding: 12px 28px; background: var(--accent); color: #fff; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; letter-spacing: 0.05em; font-family: 'Inter', sans-serif;">
+      Ver Cierre Mes Marzo →
+    </a>
+  </div>
  
   <div class="total-strip">
     <div style="display: flex; align-items: center; gap: 15px;">
@@ -307,19 +352,19 @@
         <div class="total-desc"><strong>Referentes</strong> activos en el equipo</div>
     </div>
   </div>
-    
-<div class="section-label">Coordinación general</div>
-<button type="button" disabled style="display:flex; align-items:center; gap:12px; cursor:default;">
-  <div style="flex:1">
-    <div style="font-size:16px; font-weight:500; color:var(--brown-c)">Kevin Garcia</div>
-    <div style="font-size:13px; color:var(--muted)">Gestión estratégica y supervisión integral</div>
+
+  <!-- Kevin Garcia rediseñado -->
+  <div class="section-label">Coordinación general</div>
+
+  <div class="kevin-wrapper">
+    <div class="kevin-name">Kevin Garcia</div>
+    <div class="kevin-desc">Gestión estratégica y supervisión integral</div>
   </div>
-  <div style="color:var(--brown-c); font-size:22px">›</div>
-</button>
- 
- <div id="imageModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;" onclick="this.style.display='none'">
-  <img id="modalImg" src="" style="max-width:90vw; max-height:90vh; border-radius:8px; box-shadow:0 4px 32px #000;">
-</div>
+  <div class="kevin-divider"></div>
+
+  <div id="imageModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;" onclick="this.style.display='none'">
+    <img id="modalImg" src="" style="max-width:90vw; max-height:90vh; border-radius:8px; box-shadow:0 4px 32px #000;">
+  </div>
  
   <div class="cards">
     <div class="card amber">
@@ -374,10 +419,7 @@
     </div>
   </div>
 
-
-
-
-  <div class="footer" style="margin-top:4rem; text-align:center; font-size:12px; color:var(--muted); opacity:0.6;">
+  <div class="footer" style="margin-top:4rem; text-align:center; font-size:12px; color:var(--muted); opacity:0.6; font-family:'Inter',sans-serif;">
     © 2026 Sabores Express · Hamburguesas Extremas · Equipo de Selección
   </div>
 </div>
@@ -442,15 +484,13 @@
   </div>
 </div>
 
-
-
-
 <div class="overlay" id="teamImageOverlay" onclick="closeTeamImage(event)">
   <div style="max-width:900px; width:100%; position:relative;">
     <button onclick="closeTeamImageBtn()" style="position:absolute; top:-14px; right:-14px; z-index:10; width:32px; height:32px; border-radius:50%; background:#222; border:none; color:#fff; cursor:pointer; font-size:20px; line-height:1;">×</button>
     <img src="equipo-selec.jpeg" alt="Equipo Selec" style="width:100%; border-radius:14px;">
   </div>
 </div>
+
 <script>
   window.addEventListener('load', () => {
     document.querySelectorAll('.card-bar-fill').forEach(el => {
@@ -459,9 +499,9 @@
   });
 
   function openImageModal(src) {
-  const modal = document.getElementById('imageModal');
-  document.getElementById('modalImg').src = src;
-  modal.style.display = 'flex';
+    const modal = document.getElementById('imageModal');
+    document.getElementById('modalImg').src = src;
+    modal.style.display = 'flex';
   }
   function openModal() { 
     document.getElementById('overlay').classList.add('open'); 
