@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distribución Semanal del Equipo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0f13;
+    --surface: #16181f;
+    --surface2: #1e2029;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #f0ede8;
+    --muted: #7a7d8a;
+    --accent: #e8642a;
+    --accent2: #1a7fcc;
+    --green: #1da876;
+    --purple: #8b78e8;
+    --amber: #e8a620;
+    --white-c: #f0ede8;
+    --red-c: #e82a2a;
+    --violet-c: #9b59b6;
+    --blue-c: #1a7fcc;
+    --orange-c: #e8821a;
+    --brown-c: #8B5E3C;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(232,100,42,0.10) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem 4rem;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    gap: 1rem;
+  }
+
+  .header-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--text);
+    margin-top: 4px;
+  }
+
+  h1 span { color: var(--muted); }
+
+  .date-badge {
+    font-size: 12px;
+    color: var(--muted);
+    border: 0.5px solid var(--border2);
+    padding: 6px 14px;
+    border-radius: 100px;
+    white-space: nowrap;
+    margin-top: 4px;
+    font-family: 'Inter', sans-serif;
+    flex-shrink: 0;
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Inter', sans-serif;
+  }
+  .section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border2); }
+
+  /* ── Table ── */
+  .table-wrap {
+    background: var(--surface);
+    border: 0.5px solid var(--border2);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 1.75rem;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+
+  th {
+    background: var(--surface2);
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 10.5px;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 0.5px solid var(--border2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+  }
+
+  td {
+    padding: 11px 14px;
+    border-bottom: 0.5px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .name-cell {
+    font-weight: 500;
+    white-space: nowrap;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  /* ── Avatar ── */
+  .avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 9.5px;
+    font-weight: 600;
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+  }
+  .av-facundo  { background: rgba(26,127,204,0.25); color: #57b3ff;  border: 0.5px solid rgba(26,127,204,0.4); }
+  .av-agustina { background: rgba(232,42,42,0.2);   color: #f09595;  border: 0.5px solid rgba(232,42,42,0.35); }
+  .av-agustin  { background: rgba(155,89,182,0.2);  color: #c39bd3;  border: 0.5px solid rgba(155,89,182,0.35); }
+  .av-mariano  { background: rgba(232,130,26,0.2);  color: #f0a060;  border: 0.5px solid rgba(232,130,26,0.35); }
+  .av-adrian   { background: rgba(29,168,118,0.2);  color: #5dcaa5;  border: 0.5px solid rgba(29,168,118,0.3); }
+
+  /* ── Pills ── */
+  .pill {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 100px;
+    font-size: 10.5px;
+    font-weight: 500;
+    white-space: nowrap;
+    margin: 2px 2px;
+    font-family: 'Inter', sans-serif;
+  }
+  .florida { background: rgba(26,127,204,0.15);  color: #57b3ff;  border: 0.5px solid rgba(26,127,204,0.35); }
+  .merlo   { background: rgba(29,168,118,0.15);  color: #5dcaa5;  border: 0.5px solid rgba(29,168,118,0.3); }
+  .adrogue { background: rgba(155,89,182,0.15);  color: #c39bd3;  border: 0.5px solid rgba(155,89,182,0.35); }
+  .virtual { background: rgba(232,130,26,0.15);  color: #f0a060;  border: 0.5px solid rgba(232,130,26,0.35); }
+  .kevin   { background: rgba(232,42,42,0.12);   color: #f09595;  border: 0.5px solid rgba(232,42,42,0.3);   font-size: 10px; }
+  .icheck  { background: rgba(232,100,42,0.15);  color: #f5a67a;  border: 0.5px solid rgba(232,100,42,0.35); }
+
+  .turno-tag {
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+    margin-top: 4px;
+  }
+
+  .dim-note {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-left: 6px;
+  }
+
+  /* ── Note box ── */
+  .note-box {
+    background: var(--surface);
+    border: 0.5px solid var(--border2);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .note-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .note-text {
+    font-size: 13px;
+    color: rgba(240,237,232,0.75);
+    line-height: 1.8;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .note-warning {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #f09595;
+    background: rgba(232,42,42,0.1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    border: 0.5px solid rgba(232,42,42,0.3);
+    line-height: 1.7;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 3.5rem;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    opacity: 0.5;
+    font-family: 'Inter', sans-serif;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 26px; }
+    .page { padding: 2rem 1rem 3rem; }
+    th, td { padding: 9px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="header">
+    <div>
+      <div class="header-eyebrow">Recursos Humanos · Equipo de Selección</div>
+      <h1>Distribución <span>semanal</span><br>del equipo</h1>
+    </div>
+    <span class="date-badge">Abril 2026</span>
+  </div>
+
+  <div class="section-label">Asignación de sedes · Vigente</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:130px;">Persona</th>
+          <th>Lunes</th>
+          <th>Martes</th>
+          <th>Miércoles</th>
+          <th>Jueves</th>
+          <th>Viernes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="name-cell"><span class="avatar av-facundo">FC</span>Facundo</div></td>
+          <td>
+            <span class="pill virtual">Virtual MdP</span>
+            <span class="pill virtual">Virtual Ros.</span>
+            <span class="turno-tag">tarde · presencial Merlo mañana</span>
+          </td>
+          <td><span class="pill florida">Florida</span></td>
+          <td><span class="pill merlo">Merlo</span></td>
+          <td><span class="pill florida">Florida</span></td>
+          <td>
+            <span class="pill florida">Florida</span>
+            <span class="pill merlo">Merlo</span>
+            <span class="pill kevin">criterio Kevin</span>
+          </td>
+        </tr>
+        <tr>
+          <td><div class="name-cell"><span class="avatar av-agustina">Ag</span>Agustina</div></td>
+          <td><span class="pill florida">Florida</span></td>
+          <td><span class="pill adrogue">Adrogué</span></td>
+          <td><span class="pill florida">Florida</span></td>
+          <td><span class="pill adrogue">Adrogué</span></td>
+          <td>
+            <span class="pill florida">Florida</span>
+            <span class="pill merlo">Merlo</span>
+            <span class="pill kevin">criterio Kevin</span>
+          </td>
+        </tr>
+        <tr>
+          <td><div class="name-cell"><span class="avatar av-agustin">Ag</span>Agustín</div></td>
+          <td><span class="pill florida">Florida</span></td>
+          <td><span class="pill florida">Florida</span></td>
+          <td><span class="pill adrogue">Adrogué</span></td>
+          <td><span class="pill florida">Florida</span></td>
+          <td>
+            <span class="pill florida">Florida</span>
+            <span class="pill merlo">Merlo</span>
+            <span class="pill kevin">criterio Kevin</span>
+          </td>
+        </tr>
+        <tr>
+          <td><div class="name-cell"><span class="avatar av-mariano">Ma</span>Mariano</div></td>
+          <td colspan="5" style="text-align:center;">
+            <span class="pill florida">Entrenamiento Florida</span>
+            <span class="dim-note">lunes a viernes · junto a Kevin</span>
+          </td>
+        </tr>
+        <tr>
+          <td><div class="name-cell"><span class="avatar av-adrian">Ad</span>Adrián</div></td>
+          <td colspan="5">
+            <span class="pill icheck">iCheck mañana</span>
+            <span class="pill adrogue">Soporte / entrevistas tarde</span>
+            <span class="dim-note">sala Florida · lunes a viernes</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note-box">
+    <div class="note-title">Aclaraciones importantes</div>
+    <p class="note-text">
+      Las sedes se van a respetar tal cual se refleja en la tabla. Lo único a libre criterio es la organización de horarios de jornadas no establecidas como Mar del Plata y Rosario. Recuerden que todos comparten como mínimo una zona — es super importante la comunicación, el compañerismo y el análisis de ver quién necesita con más urgencia el perfil.
+    </p>
+    <div class="note-warning">
+      Ante cualquier conflicto identificado o comentado, se procederá a una pequeña reunión para unificar asperezas. El siguiente paso será la evaluación de la sanción correspondiente.
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2026 Sabores Express · Hamburguesas Extremas · Equipo de Selección
+  </div>
+
+</div>
+</body>
+</html>
