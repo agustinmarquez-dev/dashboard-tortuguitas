@@ -34,7 +34,12 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    overflow-x: hidden;
+    .table-wrap {
+      overflow-x: auto;          /* scroll horizontal habilitado */
+      overflow-y: hidden;        /* se mantiene el clip vertical */
+      -webkit-overflow-scrolling: touch; /* scroll suave en iOS */
+}
+    }
   }
 
   body::before {
