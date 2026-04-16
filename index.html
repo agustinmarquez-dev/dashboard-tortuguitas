@@ -198,7 +198,61 @@
     cursor: pointer;
     font-family: 'Inter', sans-serif;
   }
+/* Estilos específicos para la lápida */
+.card.tombstone {
+    background: linear-gradient(135deg, #2c2e35 0%, #1a1b20 100%);
+    border: 2px solid #4a4a4a;
+    border-radius: 40px 40px 10px 10px !important; /* Tope redondeado */
+    text-align: center;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding-top: 2rem;
+}
 
+.card.tombstone::before {
+    display: none; /* Quitamos la barra de color superior */
+}
+
+.tombstone-top {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 10px;
+    background: #4a4a4a;
+    border-radius: 50%;
+    opacity: 0.3;
+}
+
+.rip-cross {
+    font-size: 28px;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.card.tombstone .card-name {
+    color: #a0a0a0 !important;
+    letter-spacing: 1px;
+}
+
+.card.tombstone .card-label {
+    color: #555;
+    font-weight: bold;
+}
+
+.tombstone-stats {
+    margin: 15px 0;
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.card.tombstone:hover {
+    transform: translateY(-2px) rotate(1deg); /* Efecto de lápida inestable */
+    border-color: #666;
+}
   .section-label {
     font-size: 11px;
     text-transform: uppercase;
@@ -462,7 +516,7 @@ h1 {
   <div class="cards">
     <div class="card amber">
       <div class="card-label">Altas Icheck y Soporte</div>
-      <div class="card-name"><b>Emiliano </b>Pravato</div>
+      <div class="card-name">Emiliano</div>
       <div class="card-number">∞</div>
       <div class="card-unit">Genuino</div>
       <div class="card-bar"><div class="card-bar-fill" data-pct="100"></div></div>
@@ -495,21 +549,32 @@ h1 {
 
     <div class="card green">
       <div class="card-label">Garantía &amp; Resolución</div>
-      <div class="card-name"><b>Mariano </b>Nussbaum</div>
+      <div class="card-name"><b>Mariano </b></div>
       <div class="card-number">9</div>
       <div class="card-unit">Potencial</div>
       <div class="card-bar"><div class="card-bar-fill" data-pct="90"></div></div>
       <button class="card-btn" onclick="openImageModal('src/cap-zonales.jpeg')">Ver equipo zonal</button>
     </div>
 
-    <div class="card purple">
-      <div class="card-label">Garantía &amp; Resolución</div>
-      <div class="card-name"><b>Facundo </b>Cáceres</div>
-      <div class="card-number">10</div>
-      <div class="card-unit">Complaciente</div>
-      <div class="card-bar"><div class="card-bar-fill" data-pct="100"></div></div>
-      <button class="card-btn" onclick="openImageModal('src/cap-zonales.jpeg')">Ver equipo zonal</button>
-    </div>
+<div class="card tombstone">
+  <div class="tombstone-top"></div>
+  <div class="card-label">Q.E.P.D.</div>
+  <div class="card-name">
+    <span class="rip-cross">†</span><br>
+    <b>Facundo </b>Cáceres
+  </div>
+  <div class="card-number" style="font-size: 24px; margin: 10px 0;">19XX - 2026</div>
+  <div class="card-unit" style="font-style: italic;">"Aquí yace el más complaciente"</div>
+  
+  <div class="tombstone-stats">
+    <span>Puntuación de alma: 10/10</span>
+    <div class="card-bar" style="background: rgba(0,0,0,0.2);"><div class="card-bar-fill" data-pct="100" style="background: #4a4a4a;"></div></div>
+  </div>
+  
+  <button class="card-btn" onclick="openModal()" style="border-style: dashed; opacity: 0.7;">
+    Dejar flores (Ver zonales)
+  </button>
+</div>
   </div>
 
   <div class="footer" style="margin-top:4rem; text-align:center; font-size:12px; color:var(--muted); opacity:0.6; font-family:'Inter',sans-serif;">
