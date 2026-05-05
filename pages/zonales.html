@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Operaciones - Selección Operativa</title>
+<style>
+:root {
+  --color-tmnt-bg: #121412;
+  --color-tmnt-green-dark: #1e241e;
+  --color-tmnt-card: #2a302a; 
+  --color-accent: #87ab87;
+  --color-text: #e0e0e0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { 
+  font-family: 'Segoe UI', Tahoma, sans-serif; 
+  background-color: var(--color-tmnt-bg);
+  /* Patrón de caparazón ninja */
+  background-image: 
+    radial-gradient(circle at center, rgba(45, 51, 45, 0.8) 0%, transparent 70%),
+    linear-gradient(30deg, #1a1f1a 12%, transparent 12.5%, transparent 87%, #1a1f1a 87.5%, #1a1f1a),
+    linear-gradient(150deg, #1a1f1a 12%, transparent 12.5%, transparent 87%, #1a1f1a 87.5%, #1a1f1a),
+    linear-gradient(30deg, #1a1f1a 12%, transparent 12.5%, transparent 87%, #1a1f1a 87.5%, #1a1f1a),
+    linear-gradient(150deg, #1a1f1a 12%, transparent 12.5%, transparent 87%, #1a1f1a 87.5%, #1a1f1a),
+    linear-gradient(60deg, #222a22 25%, transparent 25.5%, transparent 75%, #222a22 75.5%, #222a22),
+    linear-gradient(60deg, #222a22 25%, transparent 25.5%, transparent 75%, #222a22 75.5%, #222a22);
+  background-size: 80px 140px;
+  color: var(--color-text);
+  padding: 20px;
+}
+
+.tn-header {
+  background: rgba(0,0,0,0.7); padding: 25px;
+  border-radius: 12px; border-bottom: 4px solid #3d4f3d;
+  margin-bottom: 25px; text-align: center;
+}
+
+.header-text h1 { font-size: 22px; letter-spacing: 2px; color: white; text-transform: uppercase; }
+.header-text p { font-size: 12px; color: var(--color-accent); font-weight: bold; margin-top: 5px; }
+
+.selector-container {
+  display: flex; gap: 20px; padding: 0 0 25px; overflow-x: auto;
+  border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 25px;
+}
+.selector-group { display: flex; flex-direction: column; gap: 8px; }
+.group-label { font-size: 10px; text-transform: uppercase; color: #666; font-weight: 700; }
+.sel-btn { 
+  padding: 8px 16px; border-radius: 6px; border: 1px solid #333; 
+  background: #1a1c1a; color: #888; cursor: pointer; font-size: 13px;
+}
+.sel-btn.active { background: var(--color-accent); color: #1a1c1a; font-weight: 700; border-color: var(--color-accent); }
+
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px; margin-bottom: 25px;
+}
+.stat-item {
+  background: rgba(30, 36, 30, 0.9); border: 1px solid var(--color-accent);
+  padding: 15px; border-radius: 10px; text-align: center; backdrop-filter: blur(5px);
+}
+.stat-item label { font-size: 10px; text-transform: uppercase; color: var(--color-accent); font-weight: bold; }
+.stat-item span { display: block; font-size: 26px; font-weight: 800; color: white; }
+
+.search-bar { 
+  width: 100%; padding: 12px 15px; background: rgba(0,0,0,0.6); 
+  border: 1px solid var(--color-accent); border-radius: 8px; 
+  color: white; margin-bottom: 25px;
+}
+
+.zona-title { color: var(--color-accent); text-transform: uppercase; margin: 30px 0 15px; font-size: 13px; font-weight: 700; border-left: 4px solid var(--color-accent); padding-left: 10px; }
+
+.cards-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; }
+
+.gte-card {
+  background: var(--color-tmnt-card); padding: 18px; border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.03);
+}
+
+.gte-card h3 { font-size: 15px; color: white; display: flex; justify-content: space-between; }
+.regional-name { font-size: 11px; color: var(--color-accent); margin: 5px 0 10px; }
+
+.brand-tag {
+  display: inline-block; font-size: 9px; padding: 3px 10px; border-radius: 4px;
+  text-transform: uppercase; font-weight: 800; margin-bottom: 12px;
+}
+.ext { background: #4a2424; color: #ff8a8a; }
+.sab { background: #4a3e24; color: #ffca8a; }
+
+.locales-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
+.local-tag { background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 15px; font-size: 10px; color: #c4d4c9; }
+</style>
+</head>
+<body>
+
+<div class="tn-header">
+  <div class="header-text">
+    <h1>DASHBOARD GTE ZONALES</h1>
+    <p>Equipo de Selección Operativa</p>
+  </div>
+</div>
+
+<div class="selector-container">
+  <div class="selector-group">
+    <span class="group-label">Global</span>
+    <button class="sel-btn active" onclick="setGerencia('todos')" data-g="todos">Todos (43)</button>
+  </div>
+  <div class="selector-group">
+    <span class="group-label">Mariano</span>
+    <button class="sel-btn" onclick="setGerencia('Mariano')" data-g="Mariano">Equipo (14)</button>
+  </div>
+  <div class="selector-group">
+    <span class="group-label">Agustina</span>
+    <button class="sel-btn" onclick="setGerencia('Agustina')" data-g="Agustina">Equipo (15)</button>
+  </div>
+  <div class="selector-group">
+    <span class="group-label">Agustín</span>
+    <button class="sel-btn" onclick="setGerencia('Agustín')" data-g="Agustín">Equipo (14)</button>
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-item"><label>Zonales</label><span id="stat-total">43</span></div>
+  <div class="stat-item"><label>Locales Totales</label><span id="stat-locales">202</span></div>
+  <div class="stat-item"><label>Extremas</label><span id="stat-ext">14</span></div>
+  <div class="stat-item"><label>Sabores Express</label><span id="stat-sab">29</span></div>
+</div>
+
+<input type="text" class="search-bar" placeholder="Buscar por nombre, regional o local..." id="filtro" oninput="render()">
+
+<div id="main-content"></div>
+
+<script>
+const DATA = [
+  // Datos reales cargados previamente (Mariano, Agustina, Agustín)
+  { g: "Mariano", n: "Mayra Aghatt", m: "EXT", r: "Facundo Aramburo", z: "CABA", l: ["Florida", "Tucumán", "Once", "Callao", "Pueyrredón", "Pellegrini"] },
+  { g: "Mariano", n: "Monica Batista", m: "EXT", r: "Gustavo Gomez", z: "CABA", l: ["Caballito", "Liniers", "Flores", "Flores 2"] },
+  { g: "Mariano", n: "Arianna Gomez", m: "SAB", r: "Ivo Pisaniello", z: "CABA", l: ["Corrientes 1", "Corrientes 2", "Corrientes 3", "Corrientes 4"] },
+  { g: "Mariano", n: "Luciana Bianco", m: "SAB", r: "Ivo Pisaniello", z: "CABA", l: ["Liniers 1", "Liniers 2", "Ciudadela", "Pompeya"] },
+  { g: "Mariano", n: "Greisnell Mejias", m: "SAB", r: "Ivo Pisaniello", z: "CABA", l: ["Santa Fe 1", "Villa Urquiza", "Entre Ríos", "Boedo", "Pellegrini"] },
+  { g: "Mariano", n: "Ezequiel Acosta", m: "SAB", r: "Ivo Pisaniello", z: "CABA", l: ["Caballito 2", "Flores", "Ciudadela", "Pueyrredón 1", "Pueyrredón 2"] },
+  { g: "Mariano", n: "Douglas Seprum", m: "SAB", r: "Ivo Pisaniello", z: "CABA", l: ["Belgrano", "Lavalle 1", "Lavalle 2", "Tucumán", "Florida"] },
+  { g: "Mariano", n: "Mariano Artigue", m: "EXT", r: "Federico Gomez", z: "Oeste", l: ["Castelar", "Merlo", "Ramos Mejía", "Moreno"] },
+  { g: "Mariano", n: "Facundo Gimenez", m: "EXT", r: "Federico Gomez", z: "Oeste", l: ["Laferrere", "Morón", "Crovara", "San Justo"] },
+  { g: "Mariano", n: "Salome Rodriguez", m: "EXT", r: "Gustavo Gomez", z: "Oeste", l: ["Loma Hermosa", "Hurlingham", "Caseros", "Munro"] },
+  { g: "Mariano", n: "Camila Fredes", m: "SAB", r: "Gustavo Cabrera", z: "Oeste", l: ["Don Torcuato", "Bella Vista", "William Morris", "Cruce Castelar", "Loma Hermosa"] },
+  { g: "Mariano", n: "Agustina Sussi", m: "SAB", r: "Gustavo Cabrera", z: "Oeste", l: ["San Justo 1", "San Justo 2", "San Justo 3", "Lomas del Mirador", "Santos Lugares"] },
+  { g: "Mariano", n: "Renata Fedullo", m: "SAB", r: "Lucia Velez", z: "Oeste", l: ["Ramos Mejía 1", "Ramos Mejía 2", "Ramos Mejía 3", "Haedo"] },
+  { g: "Mariano", n: "Malena Aguera", m: "SAB", r: "Lucia Velez", z: "Oeste", l: ["Merlo 1", "Merlo 2", "Merlo 3", "Rafael Castillo", "Padua"] },
+  { g: "Agustina", n: "Adriana Ibarra", m: "EXT", r: "Facundo Aramburo", z: "Sur", l: ["Avellaneda", "Wilde", "Pompeya", "Rosario"] },
+  { g: "Agustina", n: "Yamila Lugo", m: "EXT", r: "Facundo Aramburo", z: "Sur", l: ["Monte Grande", "Lanús", "Adrogué", "Banfield", "La Plata"] },
+  { g: "Agustina", n: "Marianela Mazzeo", m: "EXT", r: "Facundo Aramburo", z: "Sur", l: ["Solano", "Varela", "Glew", "Temperley"] },
+  { g: "Agustina", n: "Emanuel Mazueco", m: "SAB", r: "Ivo Pisaniello", z: "Sur", l: ["Caballito 1", "Chilavert", "Lomas de Zamora 3", "Lomas de Zamora 4", "Lomas de Zamora 5"] },
+  { g: "Agustina", n: "Franco Pedrazza", m: "SAB", r: "Agustin Sbampato", z: "Sur", l: ["La Plata 1", "La Plata 2", "La Plata 3", "La Plata 4", "Lezama"] },
+  { g: "Agustina", n: "Magali Sandoval", m: "SAB", r: "Agustin Sbampato", z: "Sur", l: ["Berazategui 1", "Berazategui 2", "Solano", "Varela"] },
+  { g: "Agustina", n: "Adriana Alvarez", m: "SAB", r: "Agustin Sbampato", z: "Sur", l: ["Adrogué", "Banfield", "Temperley 1", "Temperley 2", "Lanús 2", "Lanús 3"] },
+  { g: "Agustina", n: "Camila Carranza", m: "SAB", r: "Agustin Sbampato", z: "Sur", l: ["Claypole", "Quilmes 1", "Quilmes 2", "Quilmes 3", "Wilde", "Gerli"] },
+  { g: "Agustina", n: "Michelle Alvarez", m: "SAB", r: "Agustin Sbampato", z: "Sur", l: ["El Jagüel", "Monte Grande 1", "Monte Grande 2", "Tristán Suárez", "Glew", "Ezeiza"] },
+  { g: "Agustina", n: "Lujan Brandan", m: "SAB", r: "Agustin Sbampato", z: "Interior", l: ["Mar del Plata 1", "Mar del Plata 2", "Mar del Plata 3", "Mar del Plata 4", "Mar del Plata 5"] },
+  { g: "Agustina", n: "Giovanna Solerez", m: "SAB", r: "Marcelo Biurra", z: "Interior", l: ["Rosario 1", "Rosario 2", "Rosario 3", "San Nicolás"] },
+  { g: "Agustina", n: "Pamela Maidana", m: "SAB", r: "Gustavo Cabrera", z: "Oeste", l: ["Hurlingham 1", "Hurlingham 2", "Caseros 1", "Caseros 2", "El Palomar"] },
+  { g: "Agustina", n: "Tamara Migoya", m: "SAB", r: "Gustavo Cabrera", z: "Oeste", l: ["Crovara", "Tapiales", "Laferrere 1", "Laferrere 2"] },
+  { g: "Agustina", n: "Pablo Muga", m: "SAB", r: "Lucia Velez", z: "Oeste", l: ["Morón 1", "Morón 2", "Morón 3", "Morón 4", "Morón 5"] },
+  { g: "Agustina", n: "Nahuel Sanchez", m: "SAB", r: "Lucia Velez", z: "Oeste", l: ["Luján", "General Rodríguez", "Moreno 1", "Moreno 2"] },
+  { g: "Agustín", n: "Fernando Buosi", m: "EXT", r: "Federico Gomez", z: "Norte", l: ["Rodríguez", "Luján", "Zárate", "Garín"] },
+  { g: "Agustín", n: "Juan Pereyra", m: "EXT", r: "Federico Gomez", z: "Norte", l: ["Polvorines", "Tortuguitas", "Grand Bourg", "Alberti"] },
+  { g: "Agustín", n: "Jaquelina Polo", m: "EXT", r: "Federico Gomez", z: "Norte", l: ["José C. Paz", "San Miguel", "Pilar", "Talar"] },
+  { g: "Agustín", n: "Roxana Gorosito", m: "EXT", r: "Gustavo Gomez", z: "Norte", l: ["San Isidro", "Boulogne", "Villa Adelina", "Olivos"] },
+  { g: "Agustín", n: "Lautaro Tesi", m: "EXT", r: "Gustavo Gomez", z: "Norte", l: ["San Fernando", "Virreyes", "Pacheco", "Vicente López"] },
+  { g: "Agustín", n: "Marianella Yñiguez", m: "SAB", r: "Gustavo Cabrera", z: "Norte", l: ["José C. Paz 1", "José C. Paz 2", "Del Viso", "Grand Bourg"] },
+  { g: "Agustín", n: "Melanie Pueblas", m: "SAB", r: "Gustavo Cabrera", z: "Norte", l: ["Manuel Alberti", "Sourdeaux", "Tortuguitas", "Los Polvorines"] },
+  { g: "Agustín", n: "Cecilia Montoya", m: "SAB", r: "Gustavo Cabrera", z: "Norte", l: ["San Miguel 1", "San Miguel 2", "San Miguel 3", "Pilar 1", "Pilar 2"] },
+  { g: "Agustín", n: "Ronaldo Arguello", m: "SAB", r: "Marcelo Biurra", z: "Norte", l: ["Zárate", "Escobar 1", "Maschwitz", "Boulogne"] },
+  { g: "Agustín", n: "Camila Almeida", m: "SAB", r: "Marcelo Biurra", z: "Norte", l: ["San Fernando", "San Isidro 1", "San Isidro 2", "Virreyes", "Tigre"] },
+  { g: "Agustín", n: "Veronica Gonzalez", m: "SAB", r: "Marcelo Biurra", z: "Norte", l: ["Pte. Saavedra", "Vicente López", "Munro"] },
+  { g: "Agustín", n: "Aylen Ponce", m: "SAB", r: "Marcelo Biurra", z: "Norte", l: ["Pacheco 1", "El Talar", "Olivos", "Garín"] },
+  { g: "Agustín", n: "Sofia D Antuono", m: "SAB", r: "Marcelo Biurra", z: "Norte", l: ["Benavidez", "Pacheco 2", "José León Suárez", "Maquinista Savio"] },
+  { g: "Agustín", n: "Micaela Ponce", m: "SAB", r: "Marcelo Biurra", z: "Norte", l: ["San Martín 1", "San Martín 2", "Villa Ballester 1", "Villa Ballester 2"] }
+];
+
+let activeG = 'todos';
+
+function setGerencia(g) {
+  activeG = g;
+  document.querySelectorAll('.sel-btn').forEach(b => {
+    b.classList.toggle('active', b.innerText.includes(g) || (g === 'todos' && b.innerText.includes('Todos')));
+  });
+  render();
+}
+
+function render() {
+  const query = document.getElementById('filtro').value.toLowerCase();
+  const container = document.getElementById('main-content');
+  container.innerHTML = "";
+
+  let filtrados = activeG === 'todos' ? DATA : DATA.filter(d => d.g === activeG);
+  if (query) {
+    filtrados = filtrados.filter(d => d.n.toLowerCase().includes(query) || d.l.some(loc => loc.toLowerCase().includes(query)));
+  }
+
+  document.getElementById('stat-total').innerText = filtrados.length;
+  document.getElementById('stat-locales').innerText = filtrados.reduce((acc, d) => acc + d.l.length, 0);
+  document.getElementById('stat-ext').innerText = filtrados.filter(d => d.m === "EXT").length;
+  document.getElementById('stat-sab').innerText = filtrados.filter(d => d.m === "SAB").length;
+
+  ["CABA", "Norte", "Sur", "Oeste", "Interior"].forEach(z => {
+    const porZona = filtrados.filter(d => d.z === z);
+    if(porZona.length > 0) {
+      container.innerHTML += `<div class="zona-title">ZONA ${z}</div><div class="cards-container" id="grid-${z}"></div>`;
+      porZona.forEach(item => {
+        document.getElementById(`grid-${z}`).innerHTML += `
+          <div class="gte-card">
+            <h3>${item.n} <span style="font-size:9px; opacity:0.5;">${item.g}</span></h3>
+            <div class="regional-name">Reg: ${item.r}</div>
+            <span class="brand-tag ${item.m === 'EXT' ? 'ext' : 'sab'}">${item.m === 'EXT' ? 'Extremas' : 'Sabores Express'}</span>
+            <div class="locales-list">${item.l.map(loc => `<span class="local-tag">${loc}</span>`).join('')}</div>
+          </div>`;
+      });
+    }
+  });
+}
+render();
+</script>
+</body>
+</html>
